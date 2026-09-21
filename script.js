@@ -382,18 +382,46 @@ function lluviaDePetalos() {
 
 /* ═══════════════ 5. Contador de días ═══════════════ */
 
+const MESES_NOMBRE = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+                      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
 function contar() {
   const inicio = new Date(AJUSTES.fechaInicio + "T00:00:00");
-  const hoy = new Date();
   if (isNaN(inicio)) return;
 
-  const dias = Math.max(0, Math.floor((hoy - inicio) / 86400000));
-  let meses = (hoy.getFullYear() - inicio.getFullYear()) * 12 + (hoy.getMonth() - inicio.getMonth());
-  if (hoy.getDate() < inicio.getDate()) meses--;
+  document.getElementById("desde").textContent =
+    `Juntos desde el ${inicio.getDate()} de ${MESES_NOMBRE[inicio.getMonth()]}`;
 
-  document.getElementById("dato-dias").textContent = dias;
-  document.getElementById("dato-meses").textContent = Math.max(0, meses);
-  document.getElementById("dato-flores").textContent = AJUSTES.cantidadFlores;
+  // se actualiza solo: a las 00:00 pasa de 4 a 5 meses sin recargar la página
+  const latir = () => {
+    const ahora = new Date();
+
+    // días completos de calendario, sin que los horarios los corran
+    const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+    const arranque = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
+    const dias = Math.max(0, Math.round((hoy - arranque) / 86400000));
+
+    let meses = (ahora.getFullYear() - inicio.getFullYear()) * 12 + (ahora.getMonth() - inicio.getMonth());
+    if (ahora.getDate() < inicio.getDate()) meses--;
+
+    document.getElementById("dato-dias").textContent = dias;
+    document.getElementById("dato-meses").textContent = Math.max(0, meses);
+
+    // el detalle fino, segundo a segundo
+    const pasado = Math.max(0, ahora - inicio);
+    const horas   = Math.floor(pasado / 3600000) % 24;
+    const minutos = Math.floor(pasado / 60000) % 60;
+    const segundos = Math.floor(pasado / 1000) % 60;
+
+    const cuenta = (n, palabra) => `<b>${n}</b> ${palabra}${n === 1 ? "" : "s"}`;
+
+    document.getElementById("preciso").innerHTML =
+      `y ya llevamos ${cuenta(dias, "día")}, ${cuenta(horas, "hora")}, ` +
+      `${cuenta(minutos, "minuto")} y ${cuenta(segundos, "segundo")} juntos`;
+  };
+
+  latir();
+  setInterval(latir, 1000);
 }
 
 /* ═══════════════ 6. Carrusel de fotitos ═══════════════ */
