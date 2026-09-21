@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Felices 5 meses, mi amor 💛</title>
+<meta name="description" content="Un ramo de flores amarillas para vos, por nuestros 5 meses y por el 21 de septiembre.">
+<meta name="theme-color" content="#fff7e6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="og:title" content="Felices 5 meses, mi amor 💛">
+<meta property="og:description" content="Tocá el botón y mirá lo que florece.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌼</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div class="cielo" aria-hidden="true">
+  <span class="sol"></span>
+</div>
+
+<main class="envoltura">
+
+  <!-- ─────────── Portada ─────────── -->
+  <header class="portada">
+    <p class="fechita">21 de septiembre · día de la primavera</p>
+    <h1 class="titulo">Felices 5 meses,<br><span>mi amor</span></h1>
+    <p class="subtitulo">Hoy arranca la primavera y vos sos la mía.</p>
+
+    <div class="indicacion">
+      <p class="indicacion-texto">Tocá el botón de acá abajo 👇</p>
+      <span class="flechita" aria-hidden="true"></span>
+    </div>
+
+    <button id="boton-ramo" class="boton" type="button" aria-controls="ramo" aria-expanded="false">
+      <span class="boton-emoji" aria-hidden="true">🌼</span>
+      <span class="boton-texto">Abrí tu ramo</span>
+    </button>
+  </header>
+
+  <!-- ─────────── El ramo ─────────── -->
+  <section id="ramo" class="ramo" aria-live="polite" hidden>
+    <div class="ramo-lienzo">
+      <svg id="svg-ramo" class="svg-ramo" viewBox="0 0 400 440" role="img"
+           aria-label="Un ramo de veintiún flores amarillas">
+        <g id="capa-tallos" fill="none" stroke-linecap="round"></g>
+        <g id="capa-hojas"></g>
+        <g id="capa-papel"></g>
+        <g id="capa-flores"></g>
+        <g id="capa-lazo"></g>
+      </svg>
+    </div>
+
+    <div class="carta">
+      <h2>21 flores amarillas, una por cada 21 💛</h2>
+      <p>
+        Dicen que el 21 de septiembre hay que regalar flores amarillas.
+        Yo te las regalaría igual cualquier otro día del año, pero hoy tengo excusa:
+        <strong>cinco meses con vos</strong>.
+      </p>
+      <p>
+        Gracias por los mates, por los cines, por lavarnos los dientes juntos,
+        por reírte de mis chistes malos y por hacer que lo simple sea lo mejor del día.
+      </p>
+      <p class="firma">Te amo. Feliz primavera, hermosa.</p>
+
+      <div class="contador">
+        <div class="dato"><strong id="dato-meses">5</strong><span>meses</span></div>
+        <div class="dato"><strong id="dato-dias">—</strong><span>días juntos</span></div>
+        <div class="dato"><strong id="dato-flores">21</strong><span>flores</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Carrusel ─────────── -->
+  <section class="galeria" aria-labelledby="titulo-galeria">
+    <h2 id="titulo-galeria">Nuestras fotitos</h2>
+    <p class="galeria-ayuda">Deslizá para ver más →</p>
+
+    <div class="carrusel">
+      <div id="pista" class="pista" tabindex="0" role="region" aria-label="Carrusel de fotos nuestras"></div>
+
+      <button class="flecha flecha-izq" type="button" aria-label="Foto anterior">‹</button>
+      <button class="flecha flecha-der" type="button" aria-label="Foto siguiente">›</button>
+    </div>
+
+    <div id="puntitos" class="puntitos" role="tablist" aria-label="Elegir foto"></div>
+  </section>
+
+  <footer class="pie">
+    <p>Hecho con 💛 para vos</p>
+    <p class="pie-chico">21.09 · día de la primavera</p>
+  </footer>
+
+</main>
+
+<div id="lluvia" class="lluvia" aria-hidden="true"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
