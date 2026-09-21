@@ -1,5 +1,9 @@
 name: Publicar en GitHub Pages
 
+# GitHub Pages sirve el sitio desde la rama gh-pages, así que cada vez
+# que se pushea a la rama de trabajo copiamos todo para allá y GitHub
+# lo publica solo.
+
 on:
   push:
     branches:
@@ -7,11 +11,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# si se pushea dos veces seguidas, publica la última
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -19,23 +20,9 @@ concurrency:
 jobs:
   publicar:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.publicar.outputs.page_url }}
     steps:
       - name: Traer el repo
         uses: actions/checkout@v4
 
-      - name: Preparar Pages (y activarlo si hace falta)
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Empaquetar el sitio
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-      - name: Publicar
-        id: publicar
-        uses: actions/deploy-pages@v4
+      - name: Copiar el sitio a gh-pages
+        run: git push origin HEAD:gh-pages --force
