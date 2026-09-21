@@ -14,6 +14,9 @@ const AJUSTES = {
   // Cada cuántos segundos pasa sola a la foto siguiente.
   segundosPorFoto: 3.5,
 
+  // Volumen de la canción (0 = mudo, 1 = al mango).
+  volumen: 0.55,
+
   // Las fotos del carrusel, en orden. Para sumar más: copiá la imagen
   // dentro de la carpeta "fotos/" y agregá una línea acá abajo.
   fotos: [
@@ -220,6 +223,7 @@ function abrirRamo() {
   requestAnimationFrame(() => ramo.classList.add("abierto"));
 
   lluviaDePetalos();
+  sonar();
   if (navigator.vibrate) navigator.vibrate([18, 40, 18]);
 
   if (primeraVez) {
@@ -231,7 +235,60 @@ function abrirRamo() {
 
 boton.addEventListener("click", abrirRamo);
 
-/* ═══════════════ 3. Lluvia de pétalos ═══════════════ */
+/* ═══════════════ 3. La canción ═══════════════ */
+
+const cancion      = document.getElementById("cancion");
+const botonSonido  = document.getElementById("boton-sonido");
+const iconoSonido  = botonSonido.querySelector(".icono-sonido");
+let subiendoVolumen = null;
+
+function sonar() {
+  if (!cancion || !cancion.paused) return;
+
+  cancion.volume = 0;
+  const promesa = cancion.play();
+
+  // si el navegador la deja sonar, sube el volumen de a poquito
+  Promise.resolve(promesa)
+    .then(() => {
+      botonSonido.hidden = false;
+      pintarSonido();
+      clearInterval(subiendoVolumen);
+      subiendoVolumen = setInterval(() => {
+        const nuevo = Math.min(AJUSTES.volumen, cancion.volume + AJUSTES.volumen / 25);
+        cancion.volume = nuevo;
+        if (nuevo >= AJUSTES.volumen) clearInterval(subiendoVolumen);
+      }, 90);
+    })
+    .catch(() => {
+      // algún navegador la frenó: mostramos el botón para prenderla a mano
+      botonSonido.hidden = false;
+      pintarSonido();
+    });
+}
+
+function pintarSonido() {
+  const sonando = !cancion.paused;
+  iconoSonido.textContent = sonando ? "🔊" : "🔇";
+  botonSonido.setAttribute("aria-pressed", sonando ? "true" : "false");
+  botonSonido.setAttribute("aria-label", sonando ? "Pausar la música" : "Poner la música");
+}
+
+botonSonido.addEventListener("click", () => {
+  if (cancion.paused) {
+    clearInterval(subiendoVolumen);
+    cancion.volume = AJUSTES.volumen;
+    cancion.play().then(pintarSonido).catch(pintarSonido);
+  } else {
+    cancion.pause();
+    pintarSonido();
+  }
+});
+
+cancion.addEventListener("play", pintarSonido);
+cancion.addEventListener("pause", pintarSonido);
+
+/* ═══════════════ 4. Lluvia de pétalos ═══════════════ */
 
 const lluvia = document.getElementById("lluvia");
 
@@ -261,7 +318,7 @@ function lluviaDePetalos() {
   }
 }
 
-/* ═══════════════ 4. Contador de días ═══════════════ */
+/* ═══════════════ 5. Contador de días ═══════════════ */
 
 function contar() {
   const inicio = new Date(AJUSTES.fechaInicio + "T00:00:00");
@@ -277,7 +334,7 @@ function contar() {
   document.getElementById("dato-flores").textContent = AJUSTES.cantidadFlores;
 }
 
-/* ═══════════════ 5. Carrusel de fotitos ═══════════════ */
+/* ═══════════════ 6. Carrusel de fotitos ═══════════════ */
 
 const pista    = document.getElementById("pista");
 const puntitos = document.getElementById("puntitos");
@@ -370,7 +427,7 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) detenerSolo(); else arrancarSolo();
 });
 
-/* ═══════════════ 6. Arrancamos ═══════════════ */
+/* ═══════════════ 7. Arrancamos ═══════════════ */
 
 armarRamo();
 armarCarrusel();

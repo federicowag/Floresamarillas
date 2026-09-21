@@ -13,6 +13,7 @@ hay un carrusel con fotos nuestras.
 | `estilos.css`| Los colores, tipografías y el diseño responsive |
 | `script.js`  | El ramo (SVG generado), los pétalos y el carrusel |
 | `fotos/`     | Las fotos del carrusel |
+| `musica/`    | La canción de fondo (`cancion.mp3`) |
 
 ## Cómo cambiar cosas
 
@@ -24,6 +25,7 @@ const AJUSTES = {
   fechaInicio: "2026-04-21",   // el día en que empezaron (año-mes-día)
   cantidadFlores: 21,          // cuántas flores tiene el ramo
   segundosPorFoto: 3.5,        // cada cuánto pasa sola a la foto siguiente
+  volumen: 0.55,               // volumen de la canción (0 a 1)
   fotos: [
     "fotos/foto-1.jpg",
     "fotos/foto-2.jpg",
@@ -42,6 +44,11 @@ const AJUSTES = {
 - **Velocidad del carrusel:** `segundosPorFoto`. Pasa solo de entrada; si lo
   tocás, frena 6 segundos y después sigue.
 - **Textos de la carta:** están en `index.html`, dentro de `<div class="carta">`.
+- **La canción:** es `musica/cancion.mp3` y se repite en loop. Para cambiarla,
+  reemplazá ese archivo por otro mp3 con el mismo nombre. Empieza recién cuando
+  se toca el botón del ramo (los celulares no dejan que un sitio arranque música
+  solo) y sube el volumen de a poco. Abajo a la derecha queda un botoncito 🔊
+  para pausarla o volver a ponerla.
 
 ## Cómo verlo
 

@@ -400,6 +400,32 @@ body{
   opacity: .7;
 }
 
+/* ---------- botoncito de la música ---------- */
+.boton-sonido{
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid rgba(240, 165, 0, .3);
+  border-radius: 50%;
+  font-size: 1.35rem;
+  line-height: 1;
+  background: rgba(255, 253, 248, .94);
+  box-shadow: var(--sombra);
+  cursor: pointer;
+  animation: aparecer .5s ease forwards;
+  touch-action: manipulation;
+}
+.boton-sonido[hidden]{ display: none; }
+.boton-sonido:active{ transform: scale(.93); }
+.boton-sonido:focus-visible{ outline: 3px solid var(--amarillo-3); outline-offset: 3px; }
+.boton-sonido[aria-pressed="false"]{ opacity: .72; }
+
 /* ---------- lluvia de pétalos ---------- */
 .lluvia{
   position: fixed;
