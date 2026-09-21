@@ -57,6 +57,12 @@ const crear = (tag, attrs = {}) => {
 const alAzar = (a, b) => a + Math.random() * (b - a);
 const unoDe  = (lista) => lista[Math.floor(Math.random() * lista.length)];
 
+const CAPAS = ["capa-tallos", "capa-hojas", "capa-papel", "capa-flores", "capa-lazo"];
+
+function vaciarRamo() {
+  CAPAS.forEach((id) => { document.getElementById(id).textContent = ""; });
+}
+
 function armarRamo() {
   const capaPapel  = document.getElementById("capa-papel");
   const capaTallos = document.getElementById("capa-tallos");
@@ -216,21 +222,28 @@ function abrirRamo() {
     boton.classList.add("abierto");
     boton.querySelector(".boton-texto").textContent = "Otra vez 💛";
   } else {
+    // No alcanza con sacar y poner la clase: la transición que devuelve las
+    // flores a scale(0) queda a mitad de camino y se revierte, así que no se
+    // vuelven a abrir. Armamos un ramo nuevo (sale distinto cada vez) y
+    // brota de cero.
     ramo.classList.remove("abierto");
-    void ramo.offsetWidth;                 // reinicia las animaciones
+    vaciarRamo();
+    armarRamo();
+    void ramo.offsetWidth;
   }
 
   requestAnimationFrame(() => ramo.classList.add("abierto"));
 
+  estallido();
   lluviaDePetalos();
   sonar();
-  if (navigator.vibrate) navigator.vibrate([18, 40, 18]);
+  if (navigator.vibrate) navigator.vibrate([25, 45, 25, 45, 60]);
 
-  if (primeraVez) {
-    setTimeout(() => {
-      ramo.scrollIntoView({ behavior: menosMovimiento ? "auto" : "smooth", block: "start" });
-    }, 420);
-  }
+  // siempre bajamos al ramo: si no, al tocar "otra vez" desde arriba
+  // las flores brotan fuera de la pantalla y no se ven
+  setTimeout(() => {
+    ramo.scrollIntoView({ behavior: menosMovimiento ? "auto" : "smooth", block: "start" });
+  }, 420);
 }
 
 boton.addEventListener("click", abrirRamo);
@@ -291,20 +304,69 @@ cancion.addEventListener("pause", pintarSonido);
 /* ═══════════════ 4. Lluvia de pétalos ═══════════════ */
 
 const lluvia = document.getElementById("lluvia");
+const DIBUJITOS = ["💛", "🌼", "🌻", "✨"];
+
+/* el golpe de efecto: un fogonazo dorado y pétalos disparados desde el botón */
+function estallido() {
+  if (menosMovimiento) return;
+
+  const caja = boton.getBoundingClientRect();
+  const x = caja.left + caja.width / 2;
+  const y = caja.top + caja.height / 2;
+  const posicion = `left:${x}px; top:${y}px;`;
+
+  // fogonazo que se come la pantalla
+  const luz = document.createElement("span");
+  luz.className = "destello";
+  luz.style.cssText = posicion;
+  lluvia.appendChild(luz);
+  setTimeout(() => luz.remove(), 1000);
+
+  // dos aros que se expanden
+  for (let k = 0; k < 2; k++) {
+    const aro = document.createElement("span");
+    aro.className = "aro";
+    aro.style.cssText = posicion + `animation-delay:${k * 0.14}s;`;
+    lluvia.appendChild(aro);
+    setTimeout(() => aro.remove(), 1400);
+  }
+
+  // pétalos y flores disparados en todas las direcciones
+  const cuantas = window.innerWidth < 500 ? 30 : 44;
+  for (let i = 0; i < cuantas; i++) {
+    const ch = document.createElement("span");
+    const angulo = (Math.PI * 2 * i) / cuantas + alAzar(-0.2, 0.2);
+    const fuerza = alAzar(110, 320);
+    const tam = alAzar(10, 22);
+    const dibujito = i % 4 === 0;
+
+    ch.className = dibujito ? "chispa dibujito" : "chispa";
+    if (dibujito) ch.textContent = unoDe(DIBUJITOS);
+
+    ch.style.cssText = posicion + `
+      --dx:${(Math.cos(angulo) * fuerza).toFixed(0)}px;
+      --dy:${(Math.sin(angulo) * fuerza - 60).toFixed(0)}px;
+      --giro:${alAzar(-540, 540).toFixed(0)}deg;
+      --tam:${tam.toFixed(0)}px;
+      --dur:${alAzar(1.1, 1.8).toFixed(2)}s;`;
+    lluvia.appendChild(ch);
+    setTimeout(() => ch.remove(), 2200);
+  }
+}
 
 function lluviaDePetalos() {
   if (menosMovimiento) return;
 
-  const cuantos = window.innerWidth < 500 ? 34 : 46;
+  const cuantos = window.innerWidth < 500 ? 48 : 64;
 
   for (let i = 0; i < cuantos; i++) {
     const p = document.createElement("span");
-    const corazon = i % 8 === 0;
+    const corazon = i % 5 === 0;
     p.className = corazon ? "petalo corazon" : "petalo";
-    if (corazon) p.textContent = Math.random() < .5 ? "💛" : "🌼";
+    if (corazon) p.textContent = unoDe(DIBUJITOS);
 
-    const tam = alAzar(9, 18);
-    const dur = alAzar(4.5, 8);
+    const tam = alAzar(10, 22);
+    const dur = alAzar(4, 7.5);
     p.style.left = alAzar(-5, 100) + "vw";
     p.style.setProperty("--dur", dur.toFixed(2) + "s");
     p.style.setProperty("--retraso", alAzar(0, 1.6).toFixed(2) + "s");
