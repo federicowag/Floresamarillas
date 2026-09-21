@@ -11,14 +11,22 @@ const AJUSTES = {
   // Cuántas flores tiene el ramo (21, por el 21 de septiembre).
   cantidadFlores: 21,
 
-  // Las fotos del carrusel. Para sumar más: copiá las fotos dentro de
-  // la carpeta "fotos/" y agregá una línea acá abajo.
+  // Cada cuántos segundos pasa sola a la foto siguiente.
+  segundosPorFoto: 3.5,
+
+  // Las fotos del carrusel, en orden. Para sumar más: copiá la imagen
+  // dentro de la carpeta "fotos/" y agregá una línea acá abajo.
   fotos: [
-    { src: "fotos/foto-1.jpg", texto: "Rutinas con vos = mi lugar favorito" },
-    { src: "fotos/foto-2.jpg", texto: "Tardes que no quiero que se terminen" },
-    { src: "fotos/foto-3.jpg", texto: "Este cachete es tuyo, siempre" },
-    { src: "fotos/foto-4.jpg", texto: "Función privada (aunque haya gente atrás)" },
-    { src: "fotos/foto-5.jpg", texto: "Vueltas por ahí, sin apuro" }
+    "fotos/foto-1.jpg",
+    "fotos/foto-2.jpg",
+    "fotos/foto-3.jpg",
+    "fotos/foto-4.jpg",
+    "fotos/foto-5.jpg",
+    "fotos/foto-6.jpg",
+    "fotos/foto-7.jpg",
+    "fotos/foto-8.jpg",
+    "fotos/foto-9.jpg",
+    "fotos/foto-10.jpg"
   ]
 };
 
@@ -283,19 +291,13 @@ function armarCarrusel() {
     fig.className = "diapo";
 
     const img = document.createElement("img");
-    img.src = foto.src;
-    img.alt = foto.texto || `Foto ${i + 1} de nosotros`;
+    img.src = foto;
+    img.alt = `Foto ${i + 1} de nosotros`;
     img.width = 1200; img.height = 1600;
     img.decoding = "async";
-    if (i > 0) img.loading = "lazy";
+    if (i > 1) img.loading = "lazy";
 
     fig.appendChild(img);
-
-    if (foto.texto) {
-      const pie = document.createElement("figcaption");
-      pie.textContent = foto.texto;
-      fig.appendChild(pie);
-    }
     pista.appendChild(fig);
 
     const punto = document.createElement("button");
@@ -340,18 +342,19 @@ function irA(i) {
 
 function arrancarSolo() {
   detenerSolo();
-  if (menosMovimiento || AJUSTES.fotos.length < 2) return;
+  if (AJUSTES.fotos.length < 2) return;
   solo = setInterval(() => {
     if (document.hidden) return;
     irA(actual + 1);
-  }, 5000);
+  }, Math.max(1500, AJUSTES.segundosPorFoto * 1000));
 }
 function detenerSolo() { clearInterval(solo); solo = null; }
 
+// cuando la tocan, frena un ratito y después sigue sola
 function pausar() {
   detenerSolo();
   clearTimeout(descanso);
-  descanso = setTimeout(arrancarSolo, 8000);
+  descanso = setTimeout(arrancarSolo, 6000);
 }
 
 document.querySelector(".flecha-izq").addEventListener("click", () => { irA(actual - 1); pausar(); });
@@ -373,3 +376,8 @@ armarRamo();
 armarCarrusel();
 contar();
 arrancarSolo();
+
+// por las dudas: si el navegador estaba ocupado cargando las fotos,
+// nos aseguramos de que el carrusel quede andando igual
+window.addEventListener("load", () => { if (!solo) arrancarSolo(); });
+window.addEventListener("pageshow", () => { if (!solo) arrancarSolo(); });

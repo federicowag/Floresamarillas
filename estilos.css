@@ -332,7 +332,7 @@ body{
   margin: 0;
   background: var(--blanco);
   border-radius: var(--radio);
-  padding: 12px 12px 10px;
+  padding: 12px;
   box-shadow: var(--sombra);
 }
 .diapo img{
@@ -344,14 +344,6 @@ body{
   border-radius: 14px;
   background: var(--crema-2);
 }
-.diapo figcaption{
-  padding: 12px 6px 4px;
-  font-family: "Dancing Script", cursive;
-  font-size: 1.3rem;
-  line-height: 1.25;
-  color: var(--tinta-suave);
-}
-
 .flecha{
   position: absolute;
   top: 42%;
@@ -449,7 +441,6 @@ body{
 @media (min-width: 720px){
   .envoltura{ max-width: 620px; padding-top: 40px; }
   .flecha{ display: block; }
-  .diapo figcaption{ font-size: 1.4rem; }
   /* en pantalla grande la foto entra entera, sin recortar caras */
   .diapo img{
     width: auto;

@@ -23,8 +23,10 @@ Todo lo que se toca habitualmente está arriba de todo en `script.js`, en el blo
 const AJUSTES = {
   fechaInicio: "2026-04-21",   // el día en que empezaron (año-mes-día)
   cantidadFlores: 21,          // cuántas flores tiene el ramo
+  segundosPorFoto: 3.5,        // cada cuánto pasa sola a la foto siguiente
   fotos: [
-    { src: "fotos/foto-1.jpg", texto: "Rutinas con vos = mi lugar favorito" },
+    "fotos/foto-1.jpg",
+    "fotos/foto-2.jpg",
     ...
   ]
 };
@@ -34,9 +36,11 @@ const AJUSTES = {
   “meses”. Está puesta en el 21 de abril de 2026 (cinco meses justos antes del
   21 de septiembre); cambiala por la de ustedes si es otra.
 - **Sumar fotos:** copiá la imagen dentro de `fotos/` y agregá una línea más al
-  listado, con su textito. El carrusel, los puntitos y las flechas se arman solos.
-  Conviene que las fotos sean verticales (3:4) y de menos de ~500 KB para que
-  cargue rápido en el celular.
+  listado. El carrusel, los puntitos y las flechas se arman solos. Conviene que
+  las fotos sean verticales y de menos de ~300 KB para que cargue rápido en el
+  celular. Van sin texto: se ven solas.
+- **Velocidad del carrusel:** `segundosPorFoto`. Pasa solo de entrada; si lo
+  tocás, frena 6 segundos y después sigue.
 - **Textos de la carta:** están en `index.html`, dentro de `<div class="carta">`.
 
 ## Cómo verlo
