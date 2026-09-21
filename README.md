@@ -50,14 +50,17 @@ const AJUSTES = {
   solo) y sube el volumen de a poco. Abajo a la derecha queda un botoncito 🔊
   para pausarla o volver a ponerla.
 
-## Cómo verlo
+## Dónde está publicado
 
-Abriendo `index.html` en cualquier navegador ya funciona.
+**https://federicowag.github.io/Floresamarillas/**
 
-Para tener un link para mandarle, la forma más simple es **GitHub Pages**:
-Settings → Pages → *Deploy from a branch* → elegí la rama y la carpeta `/ (root)`.
-En un par de minutos queda en
-`https://federicowag.github.io/floresamarillas/`.
+Lo sirve GitHub Pages desde la rama `gh-pages`. No hay que hacer nada a mano:
+el workflow `.github/workflows/pages.yml` copia la rama de trabajo a `gh-pages`
+en cada push y GitHub republica en un minuto. Para trabajar localmente alcanza
+con abrir `index.html` en cualquier navegador.
+
+Como el sitio es público, la canción también queda accesible para cualquiera que
+tenga el link.
 
 ## Detalles
 
